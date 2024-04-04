@@ -104,33 +104,19 @@ $(document).ready(function () {
   const modalCheckbox = $('.modal__checkbox-real')
   const modalCheckboxLabel = $('.modal__checkbox-label')
   const modalCheckboxCustom = $('.modal__checkbox-custom')
-  let isFormSuccess = false
 
-  function revealModal(isFormSuccess) {
-    if (!isFormSuccess) {
-      contactsModal.removeClass('modal--dnone')
-      setTimeout(() => {
-        contactsModal.removeClass('modal--hidden')
-      }, 300)
-      return
-    }
-    thankYouModal.removeClass('modal--dnone')
+  function revealModal() {
+    contactsModal.removeClass('modal--dnone')
     setTimeout(() => {
-      thankYouModal.removeClass('modal--hidden')
+      contactsModal.removeClass('modal--hidden')
     }, 300)
   }
-  function closeModal(isFormSuccess) {
-    if (!isFormSuccess) {
-      contactsModal.addClass('modal--hidden')
-      setTimeout(() => {
-        contactsModal.addClass('modal--dnone')
-        $('.modal#contacts-modal input').val('')
-      }, 300)
-      return
-    }
-    thankYouModal.addClass('modal--hidden')
+  function closeModal(target) {
+    console.log(target)
+    contactsModal.addClass('modal--hidden')
     setTimeout(() => {
-      thankYouModal.addClass('modal--dnone')
+      contactsModal.addClass('modal--dnone')
+      $('.modal#contacts-modal input').val('')
     }, 300)
   }
 
@@ -140,31 +126,31 @@ $(document).ready(function () {
 
   modalLinks.on('click', function (e) {
     e.preventDefault()
-    revealModal(isFormSuccess)
+    revealModal()
   })
   closeModalButton.on('click', function (e) {
-    closeModal(isFormSuccess)
+    closeModal(e)
   })
 
   $('.modal').on('click', function (e) {
     if ($(e.target).is($('.modal__wrapper'))) {
-      closeModal(isFormSuccess)
+      closeModal(e.currentTarget)
     }
   })
 
-  contactsModalForm.on('submit', function (e) {
-    e.preventDefault()
-    closeModal(isFormSuccess)
-    isFormSuccess = !isFormSuccess
-    revealModal(isFormSuccess)
-    setTimeout(() => {
-      if (!thankYouModal.hasClass('modal--hidden')) {
-        console.warn('turning form off strictly')
-        closeModal(isFormSuccess)
-      }
-      isFormSuccess = !isFormSuccess
-    }, 10000)
-  })
+  // contactsModalForm.on('submit', function (e) {
+  //   e.preventDefault()
+  //   closeModal(isFormSuccess)
+  //   isFormSuccess = !isFormSuccess
+  //   revealModal(isFormSuccess)
+  //   setTimeout(() => {
+  //     if (!thankYouModal.hasClass('modal--hidden')) {
+  //       console.warn('turning form off strictly')
+  //       closeModal(isFormSuccess)
+  //     }
+  //     isFormSuccess = !isFormSuccess
+  //   }, 10000)
+  // })
 
   // Header Variables
   const siteContainer = $('.site-container')

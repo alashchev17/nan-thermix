@@ -99,39 +99,42 @@ $(document).ready(function () {
   const modalLinks = $('[data-modal="true"]')
   const contactsModal = $('.modal#contacts-modal')
   const thankYouModal = $('.modal#thank-you-modal')
-  const contactsModalForm = $('.modal__form')
   const closeModalButton = $('.modal__close')
   const modalCheckbox = $('.modal__checkbox-real')
   const modalCheckboxLabel = $('.modal__checkbox-label')
   const modalCheckboxCustom = $('.modal__checkbox-custom')
-  let isFormSuccess = false
 
-  function revealModal(isFormSuccess) {
-    if (!isFormSuccess) {
-      contactsModal.removeClass('modal--dnone')
-      setTimeout(() => {
-        contactsModal.removeClass('modal--hidden')
-      }, 300)
-      return
-    }
-    thankYouModal.removeClass('modal--dnone')
+  function revealModal() {
+    contactsModal.removeClass('modal--dnone')
     setTimeout(() => {
-      thankYouModal.removeClass('modal--hidden')
+      contactsModal.removeClass('modal--hidden')
     }, 300)
   }
-  function closeModal(isFormSuccess) {
-    if (!isFormSuccess) {
-      contactsModal.addClass('modal--hidden')
+  function closeModal(target, modal) {
+    if (!modal) {
+      switch (target.dataset.close) {
+        case 'contacts':
+          contactsModal.addClass('modal--hidden')
+          setTimeout(() => {
+            contactsModal.addClass('modal--dnone')
+            $('.modal#contacts-modal input').val('')
+          }, 300)
+          break
+
+        case 'thankyou':
+          thankYouModal.addClass('modal--hidden')
+          setTimeout(() => {
+            thankYouModal.addClass('modal--dnone')
+          }, 300)
+          break
+      }
+    } else {
+      modal.classList.add('modal--hidden')
       setTimeout(() => {
-        contactsModal.addClass('modal--dnone')
+        modal.classList.add('modal--dnone')
         $('.modal#contacts-modal input').val('')
       }, 300)
-      return
     }
-    thankYouModal.addClass('modal--hidden')
-    setTimeout(() => {
-      thankYouModal.addClass('modal--dnone')
-    }, 300)
   }
 
   modalCheckboxLabel.on('click', function () {
@@ -140,30 +143,16 @@ $(document).ready(function () {
 
   modalLinks.on('click', function (e) {
     e.preventDefault()
-    revealModal(isFormSuccess)
+    revealModal()
   })
   closeModalButton.on('click', function (e) {
-    closeModal(isFormSuccess)
+    closeModal(e.currentTarget)
   })
 
   $('.modal').on('click', function (e) {
     if ($(e.target).is($('.modal__wrapper'))) {
-      closeModal(isFormSuccess)
+      closeModal(null, e.currentTarget)
     }
-  })
-
-  contactsModalForm.on('submit', function (e) {
-    e.preventDefault()
-    closeModal(isFormSuccess)
-    isFormSuccess = !isFormSuccess
-    revealModal(isFormSuccess)
-    setTimeout(() => {
-      if (!thankYouModal.hasClass('modal--hidden')) {
-        console.warn('turning form off strictly')
-        closeModal(isFormSuccess)
-      }
-      isFormSuccess = !isFormSuccess
-    }, 10000)
   })
 
   // Header Variables
