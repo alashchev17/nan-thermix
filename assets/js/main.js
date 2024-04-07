@@ -523,6 +523,64 @@ $(document).ready(function () {
     }
   }
 
+  function organizeSystemImages() {
+    $('.object').hover(
+      function () {
+        let e = $(this).data('object')
+        $('.system__interactive-tooltip').each(function () {
+          var t = $(this).data('object')
+          if (t !== e) {
+            $(this).addClass('hidden')
+          } else {
+            $(this).removeClass('hidden')
+          }
+        })
+        $(".system__interactive-object[data-object='" + e + "']").addClass('active')
+        // $(".system__interactive-tooltip[data-object='" + e + "']").addClass('active')
+        $('.system__interactive-wrapper').addClass('active')
+      },
+      function () {
+        let e = $(this).data('object')
+        $(".system__interactive-object[data-object='" + e + "']").removeClass('active')
+        $('.system__interactive-tooltip').removeClass('hidden')
+        $('.system__interactive-wrapper').removeClass('active')
+      }
+    )
+
+    $('.system__interactive-tooltip').hover(
+      function () {
+        let e = $(this).data('object')
+        $('.system__interactive-tooltip').each(function () {
+          var t = $(this).data('object')
+          if (t !== e) {
+            $(this).addClass('hidden')
+          } else {
+            $(this).removeClass('hidden')
+          }
+        })
+        $(".system__interactive-object[data-object='" + e + "']").addClass('active')
+        $('.system__interactive-wrapper').addClass('active')
+      },
+      function () {
+        let e = $(this).data('object')
+        $(".system__interactive-object[data-object='" + e + "']").removeClass('active')
+        $('.system__interactive-tooltip').removeClass('hidden')
+        $('.system__interactive-wrapper').removeClass('active')
+      }
+    )
+  }
+
+  function scaleSystemTooltips() {
+    let container = $('.system__interactive')[0]
+    let tooltips = $('.system__interactive-tooltips')[0]
+
+    let scaleFactor = 1380 / container.getBoundingClientRect().width
+
+    $('.system__interactive-tooltip').each(function () {
+      $(this)[0].style.transform = `scale(${1 / scaleFactor})`
+    })
+  }
+
   // Advantages
 
   function initAdvantagesAnimation() {
@@ -1029,11 +1087,17 @@ $(document).ready(function () {
     // sloganAnimate()
     initCellAnimate()
     // initSystemAnimation()
+    organizeSystemImages()
+    scaleSystemTooltips()
     initAdvantagesAnimation()
     // initDiscoveryAnimation()
     initializeTestimonialsSlider()
     // initTestimonialsAnimation()
     // initFooterAnimation()
+  })
+
+  $(window).on('resize', () => {
+    scaleSystemTooltips()
   })
 
   $(document).on('scroll', () => {
