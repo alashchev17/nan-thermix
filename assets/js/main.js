@@ -547,27 +547,29 @@ $(document).ready(function () {
       }
     )
 
-    $('.system__interactive-tooltip').hover(
-      function () {
-        let e = $(this).data('object')
-        $('.system__interactive-tooltip').each(function () {
-          var t = $(this).data('object')
-          if (t !== e) {
-            $(this).addClass('hidden')
-          } else {
-            $(this).removeClass('hidden')
-          }
-        })
-        $(".system__interactive-object[data-object='" + e + "']").addClass('active')
-        $('.system__interactive-wrapper').addClass('active')
-      },
-      function () {
-        let e = $(this).data('object')
-        $(".system__interactive-object[data-object='" + e + "']").removeClass('active')
-        $('.system__interactive-tooltip').removeClass('hidden')
-        $('.system__interactive-wrapper').removeClass('active')
-      }
-    )
+    if ($(window).width() > 992) {
+      $('.system__interactive-tooltip').hover(
+        function () {
+          let e = $(this).data('object')
+          $('.system__interactive-tooltip').each(function () {
+            var t = $(this).data('object')
+            if (t !== e) {
+              $(this).addClass('hidden')
+            } else {
+              $(this).removeClass('hidden')
+            }
+          })
+          $(".system__interactive-object[data-object='" + e + "']").addClass('active')
+          $('.system__interactive-wrapper').addClass('active')
+        },
+        function () {
+          let e = $(this).data('object')
+          $(".system__interactive-object[data-object='" + e + "']").removeClass('active')
+          $('.system__interactive-tooltip').removeClass('hidden')
+          $('.system__interactive-wrapper').removeClass('active')
+        }
+      )
+    }
   }
 
   function scaleSystemTooltips() {
@@ -575,10 +577,43 @@ $(document).ready(function () {
     let tooltips = $('.system__interactive-tooltips')[0]
 
     let scaleFactor = 1380 / container.getBoundingClientRect().width
+    if ($(window).width() > 992) {
+      $('.system__interactive-tooltip').each(function () {
+        $(this)[0].style.transform = `scale(${1 / scaleFactor})`
+      })
+      return
+    }
 
     $('.system__interactive-tooltip').each(function () {
-      $(this)[0].style.transform = `scale(${1 / scaleFactor})`
+      $(this)[0].style.transform = 'scale(1)'
     })
+  }
+
+  function updateSystemContainerImage() {
+    let image = $('.system__interactive-image')
+    let tooltipsContainer = $('.system__interactive-tooltips')
+    let tooltips = $('.system__interactive-tooltip')
+    let containerWrapper = $('.system__interactive-wrapper')
+    let svgObjects = $('.system__interactive-objects')
+    let objectsImages = $('.system__interactive-object')
+
+    if ($(window).width() > 992) {
+      image.hasClass('mobile') && image.removeClass('mobile')
+      containerWrapper.hasClass('mobile') && containerWrapper.removeClass('mobile')
+      tooltipsContainer.hasClass('mobile') && tooltipsContainer.removeClass('mobile')
+      tooltips.hasClass('mobile') && tooltips.removeClass('mobile')
+      svgObjects.hasClass('mobile') && svgObjects.removeClass('mobile')
+      objectsImages.hasClass('mobile') && objectsImages.removeClass('mobile')
+      image[0].src = './assets/images/system/systemContainerBg.png'
+    } else {
+      image.addClass('mobile')
+      containerWrapper.addClass('mobile')
+      tooltips.addClass('mobile')
+      tooltipsContainer.addClass('mobile')
+      svgObjects.addClass('mobile')
+      objectsImages.addClass('mobile')
+      image[0].src = './assets/images/system/systemContainerBgMobile.png'
+    }
   }
 
   // Advantages
@@ -1089,6 +1124,7 @@ $(document).ready(function () {
     // initSystemAnimation()
     organizeSystemImages()
     scaleSystemTooltips()
+    updateSystemContainerImage()
     initAdvantagesAnimation()
     // initDiscoveryAnimation()
     initializeTestimonialsSlider()
@@ -1098,6 +1134,7 @@ $(document).ready(function () {
 
   $(window).on('resize', () => {
     scaleSystemTooltips()
+    updateSystemContainerImage()
   })
 
   $(document).on('scroll', () => {
