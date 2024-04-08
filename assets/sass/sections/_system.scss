@@ -304,6 +304,7 @@
           border-radius: 50%;
           z-index: 11;
           transition: all 0.3s ease-in-out;
+          animation: circlesAnimation 2s ease-in-out infinite;
         }
         &::after {
           content: '';
@@ -318,45 +319,12 @@
           border-radius: 50%;
           z-index: 12;
           transition: all 0.3s ease-in-out;
+          animation: circlesAnimation 2s ease-in-out infinite;
         }
       }
       // прописываем координаты для каждого объекта тултипа
-      // software
-      &[data-object='1'] {
-        top: 20%;
-        left: 3%;
-        #{$self}-circle {
-          position: absolute;
-          top: 200px;
-          left: 55px;
-        }
-        &::before {
-          top: 12px;
-          right: -13px;
-          width: 85px;
-          height: 200px;
-          background-image: url('../images/system/line-1.svg');
-        }
-      }
-      // microscope
-      &[data-object='2'] {
-        top: 9.5%;
-        left: 58%;
-        #{$self}-circle {
-          position: absolute;
-          top: 5px;
-          right: 272px;
-        }
-        &::before {
-          top: -25px;
-          left: -107%;
-          width: 154.3px;
-          height: 47.75px;
-          background-image: url('../images/system/line-2.svg');
-        }
-      }
       // dht
-      &[data-object='3'] {
+      &[data-object='1'] {
         bottom: 5.5%;
         left: 24%;
         transform-origin: bottom left;
@@ -374,7 +342,7 @@
         }
       }
       // pipette holder
-      &[data-object='4'] {
+      &[data-object='2'] {
         top: 26.5%;
         left: 58%;
         #{$self}-circle {
@@ -390,8 +358,25 @@
           background-image: url('../images/system/line-4.svg');
         }
       }
+      // software
+      &[data-object='3'] {
+        top: 20%;
+        left: 3%;
+        #{$self}-circle {
+          position: absolute;
+          top: 200px;
+          left: 55px;
+        }
+        &::before {
+          top: 12px;
+          right: -13px;
+          width: 85px;
+          height: 200px;
+          background-image: url('../images/system/line-1.svg');
+        }
+      }
       // plug&play
-      &[data-object='5'] {
+      &[data-object='4'] {
         top: 21%;
         right: 6.5%;
         transform-origin: top right;
@@ -409,7 +394,7 @@
         }
       }
       // micromanipulator
-      &[data-object='6'] {
+      &[data-object='5'] {
         bottom: 5.5%;
         right: 10%;
         transform-origin: bottom right;
@@ -426,6 +411,24 @@
           background-image: url('../images/system/line-6.svg');
         }
       }
+      // microscope
+      &[data-object='6'] {
+        top: 9.5%;
+        left: 58%;
+        #{$self}-circle {
+          position: absolute;
+          top: 5px;
+          right: 272px;
+        }
+        &::before {
+          top: -25px;
+          left: -107%;
+          width: 154.3px;
+          height: 47.75px;
+          background-image: url('../images/system/line-2.svg');
+        }
+      }
+
       &.mobile {
         position: static;
         display: flex;
@@ -490,5 +493,18 @@
         margin-bottom: 32px;
       }
     }
+  }
+}
+
+@keyframes circlesAnimation {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  35% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
   }
 }

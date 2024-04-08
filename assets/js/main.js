@@ -546,7 +546,9 @@ $(document).ready(function () {
         $('.system__interactive-wrapper').removeClass('active')
       }
     )
+  }
 
+  function handleTooltipsHover() {
     if ($(window).width() > 992) {
       $('.system__interactive-tooltip').hover(
         function () {
@@ -686,76 +688,74 @@ $(document).ready(function () {
     }
   }
 
-  let isReinitializedOnMobile = false
-
   function destroyAndReinitializeAdvantagesSlider() {
     const advantagesSlider = $('.advantages__slider-wrapper')
+    let sliderButtons = {
+      prevArrow: $('.advantages__slider-controls--mobile .advantages__slider-button--prev'),
+      nextArrow: $('.advantages__slider-controls--mobile .advantages__slider-button--next'),
+    }
+    if (advantagesSlider.hasClass('slick-initialized')) {
+      advantagesSlider.slick('destroy')
+    }
     if ($(window).width() > 1024) {
-      if (isReinitializedOnMobile) isReinitializedOnMobile = false // необходимо для очистки флага инициализации слайдера на мобильном устройстве
-      if (advantagesSlider.hasClass('slick-initialized')) {
-        advantagesSlider.slick('unslick')
-      }
-      advantagesSlider.slick({
-        nextArrow: $('.advantages__slider-controls--desktop .advantages__slider-button--next'),
+      // переназначение кнопок управление в слайдер для десктопной версии
+      sliderButtons = {
+        ...sliderButtons,
         prevArrow: $('.advantages__slider-controls--desktop .advantages__slider-button--prev'),
-        infinite: false,
-        adaptiveHeight: true,
-        draggable: false,
-        slidesToShow: 4,
-        slidesToScroll: 2,
-        responsive: [
-          {
-            breakpoint: 1270,
-            settings: {
-              slidesToShow: 3,
-              slidesToScroll: 1,
-            },
+        nextArrow: $('.advantages__slider-controls--desktop .advantages__slider-button--next'),
+      }
+    }
+    advantagesSlider.slick({
+      nextArrow: sliderButtons.nextArrow,
+      prevArrow: sliderButtons.prevArrow,
+      infinite: false,
+      adaptiveHeight: true,
+      draggable: false,
+      slidesToShow: 4,
+      slidesToScroll: 2,
+      responsive: [
+        {
+          breakpoint: 1270,
+          settings: {
+            slidesToShow: 3,
+            slidesToScroll: 1,
           },
-        ],
-      })
-    } else {
-      if (!isReinitializedOnMobile) {
-        if (!advantagesSlider.hasClass('slick-initialized')) {
-          isReinitializedOnMobile = true
-          advantagesSlider.slick({
-            nextArrow: $('.advantages__slider-controls--mobile .advantages__slider-button--next'),
-            prevArrow: $('.advantages__slider-controls--mobile .advantages__slider-button--prev'),
-            infinite: false,
+        },
+        {
+          breakpoint: 1024,
+          settings: {
             adaptiveHeight: true,
             swipe: true,
             swipeToSlide: true,
             slidesToShow: 3,
             slidesToScroll: 1,
-            responsive: [
-              {
-                breakpoint: 960,
-                settings: {
-                  slidesToShow: 2,
-                  slidesToScroll: 1,
-                },
-              },
-              {
-                breakpoint: 650,
-                settings: {
-                  slidesToShow: 1,
-                  slidesToScroll: 1,
-                  variableWidth: true,
-                },
-              },
-            ],
-          }) // переназначаем настройки слайдера если окно браузера < 1024px
-        } else {
-          advantagesSlider.slick('unslick')
-        }
-      }
-    }
+          },
+        },
+        {
+          breakpoint: 960,
+          settings: {
+            adaptiveHeight: true,
+            swipe: true,
+            swipeToSlide: true,
+            slidesToShow: 2,
+            slidesToScroll: 1,
+          },
+        },
+        {
+          breakpoint: 650,
+          settings: {
+            adaptiveHeight: true,
+            swipe: true,
+            swipeToSlide: true,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            variableWidth: true,
+          },
+        },
+      ],
+    })
+    console.log(advantagesSlider.slick('getSlick'))
   }
-
-  destroyAndReinitializeAdvantagesSlider()
-
-  $(window).on('resize', function () {
-    destroyAndReinitializeAdvantagesSlider()
-  })
 
   // Discovery
 
@@ -1125,7 +1125,9 @@ $(document).ready(function () {
     organizeSystemImages()
     scaleSystemTooltips()
     updateSystemContainerImage()
+    handleTooltipsHover()
     initAdvantagesAnimation()
+    destroyAndReinitializeAdvantagesSlider()
     // initDiscoveryAnimation()
     initializeTestimonialsSlider()
     // initTestimonialsAnimation()
@@ -1135,6 +1137,8 @@ $(document).ready(function () {
   $(window).on('resize', () => {
     scaleSystemTooltips()
     updateSystemContainerImage()
+    handleTooltipsHover()
+    setTimeout(destroyAndReinitializeAdvantagesSlider, 1000)
   })
 
   $(document).on('scroll', () => {
