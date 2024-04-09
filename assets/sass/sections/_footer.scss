@@ -112,6 +112,8 @@
       background-color: var(--gray);
       transition: background-color 0.3s ease-in-out;
       svg {
+        height: 100%;
+        width: 100%;
         stroke: var(--white);
       }
     }

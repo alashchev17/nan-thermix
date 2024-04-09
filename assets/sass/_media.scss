@@ -343,6 +343,8 @@ $x-small: 420px;
       &--mobile {
         position: relative;
         display: flex;
+        gap: 24px;
+        overflow: auto;
       }
     }
     &__logo {
